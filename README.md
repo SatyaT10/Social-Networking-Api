@@ -1,0 +1,10 @@
+post-http://127.0.0.1:8000/api/register
+post-http://127.0.0.1:8000/api/login
+get-http://127.0.0.1:8000/api/view-profile
+get-http://127.0.0.1:8000/api/delete-profile
+post-http://127.0.0.1:8000/api/update-post
+post-http://127.0.0.1:8000/api/create-post
+post-http://127.0.0.1:8000/api/update-post
+get-post-http://127.0.0.1:8000/api/
+get-post-http://127.0.0.1:8000/api/delete-post
+post-post-http://127.0.0.1:8000/api/follow
