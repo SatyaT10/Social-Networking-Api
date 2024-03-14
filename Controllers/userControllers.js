@@ -163,8 +163,14 @@ const deleteUserProfile = async (req, res) => {
         const userData = req.user.userData;
         const isValidUser = await User.findOne({ email: userData.email });
         if (isValidUser) {
-            await User.findOneAndDelete({ email: userData.email }).exec();
-            res.status(200).json({ success: true, message: 'Account has been deleted!' })
+             const passwordMatch = await bcrypt.compare(password, isValidUser.password);
+            if(passwordMatch){
+                await User.findOneAndDelete({ email: userData.email }).exec();
+                 res.status(200).json({ success: true, message: 'Account has been deleted!' })
+            }else{
+            res.status(400).send("Please enter a right password to delete your account !");
+            }
+            
         } else {
             res.status(400).send("You can not Delete your own Account!");
         }
