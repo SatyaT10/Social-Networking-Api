@@ -110,6 +110,8 @@ const updateUserProfile = async (req, res) => {
         if (name || email || mobile || password || image) {
             //  Check Email Is Exists or not
             const isExist = await User.findOne({ email: userData.email });
+            const passwordMatch = await bcrypt.compare(password, isExist.password);
+            if(passwordMatch){
             if (isExist) {
                 await User.findOneAndUpdate(
                     { email: email },
@@ -120,15 +122,16 @@ const updateUserProfile = async (req, res) => {
                             email: email,
                             mobile: mobile,
                             image: 'iamge/' + image,
-                            password: await securePassword(password),
                         }
                     });
                 res.status(200).json({ success: true, message: "Your Profile Updated Successfully!" });
-
-
+                
             } else {
                 res.status(400).json({ success: false, message: "User doesn't exist!" });
             }
+            }else{
+                 res.status(400).json({ success: false, message: "Please Enter correct password for update your Daitle !" });
+            }      
 
         } else {
             res.status(400).json({ success: false, message: "You can't Update your Name or Email or Mobile Number!" })
@@ -207,6 +210,7 @@ const updatePost = async (req, res) => {
         if (!postMessage || !userData)
             return res.status(400).json({ success: false, message: "Please provide a Post!" });
         const validUser = await User.findOne({ email: userData.email });
+        
         if (validUser) {
             const isPost = await Post.findOne({ user_id: userData.user_id });
             if (isPost) {
